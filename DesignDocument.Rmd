@@ -1,0 +1,21 @@
+---
+title: "Blueberry RNA-Seq Analysis
+author: "Scott Teresi"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Design Plan:
+1. Index the genome
+2. Trim the reads
+3. Align the reads with STAR
+4. Quantify the reads with HTSeq
+5. Collate the reads
+6. Run EdgeR to get differential expression
+
+## Genome Indexing
+First we need to index the genome. We 
