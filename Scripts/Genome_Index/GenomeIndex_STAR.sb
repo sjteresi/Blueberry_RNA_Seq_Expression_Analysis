@@ -1,8 +1,8 @@
 #!/bin/bash -login
 #SBATCH --time=02:00:00
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=2
-#SBATCH --mem-per-cpu=16G
+#SBATCH --cpus-per-task=4
+#SBATCH --mem-per-cpu=20G
 #SBATCH --job-name Genome_Index_STAR_Teresi
 #SBATCH -o GenomeIndex.out
 #SBATCH -e GenomeIndex.err
