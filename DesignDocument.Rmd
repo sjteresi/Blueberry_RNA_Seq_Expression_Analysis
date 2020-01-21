@@ -18,4 +18,4 @@ knitr::opts_chunk$set(echo = TRUE)
 6. Run EdgeR to get differential expression
 
 ## Genome Indexing
-First we need to index the genome. We 
+First we need to index the genome. This step runs rather fast. I am using **STAR** to accomplish this. Our *gff* file is a gff3 judging from the header. However I may need to trim off any *#* characters from the file before feeding to STAR.
