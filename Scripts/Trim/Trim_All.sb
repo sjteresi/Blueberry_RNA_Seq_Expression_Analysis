@@ -1,0 +1,39 @@
+#!/bin/sh -login
+
+#SBATCH -J Trimmomatic_Teresi 
+#SBATCH --time 03:59:00
+#SBATCH --ntasks=1
+#SBATCH --mem-per-cpu=8G
+#SBATCH --array=1-84
+#SBATCH --output=Trim-%j.out
+#SBATCH --error=Trim-%j.err
+
+module purge
+module load Trimmomatic/0.38-Java-1.8.0_162
+
+begin=`date +%s`
+#echo $HOSTNAME
+#echo "My SLURM_ARRAY_TASK_ID: " $SLURM_ARRAY_TASK_ID
+blueberry='/mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq/'
+fastq_input='/mnt/research/edgerpat_lab/MSU_GenomicsCore_Sequencing_2018/VaccBSGW_Bnap_20181005_RNASeq_PE150/VaccBSGW/'
+output='/mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq/Input/Trimmomatic/'
+
+cd $fastq_input
+ls -d "$PWD/"*gz | grep R1 > ${output}R1.txt
+ls -d "$PWD/"*gz | grep R2 > ${output}R2.txt
+#cd $blueberry
+#paste R1.txt R2.txt > File_List.txt
+#rm R1.txt R2.txt
+
+R1=`sed "${SLURM_ARRAY_TASK_ID}q;d" ${output}R1.txt`
+R2=`sed "${SLURM_ARRAY_TASK_ID}q;d" ${output}R2.txt`
+R1_Base=`basename $R1`
+R2_Base=`basename $R2`
+output='/mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq/Input/Trimmomatic/Output/'
+cd $output
+
+java -jar $EBROOTTRIMMOMATIC/trimmomatic-0.38.jar PE -threads 15 -phred33 $R1 $R2 ${R1_Base}_trimmed_P1.fq ${R1_Base}_trimmed_U1.fq ${R2_Base}_trimmed_P2.fq ${R2_Base}_trimmed_U2.fq ILLUMINACLIP:/mnt/research/edgerpat_lab/Scotty/Grape_RNA_Seq/Trimmomatic/Trimmomatic-0.39/adapters/TruSeq3-PE.fa:2:30:10 HEADCROP:15 AVGQUAL:25 TRAILING:30
+
+end=`date +%s`
+elapsed=`expr $end - $begin`
+echo Time taken: $elapsed
