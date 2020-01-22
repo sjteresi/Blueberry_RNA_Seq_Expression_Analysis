@@ -21,4 +21,6 @@ knitr::opts_chunk$set(echo = TRUE)
 First we need to index the genome. This step runs rather fast. I am using **STAR** to accomplish this. Our *gff* file is a gff3 judging from the header (this adds an extra option to the code). However I may need to trim off any *###* characters from the file before feeding to STAR.
 
 ## Trimming
-Following the genome indexing, we need to trim reads.
+Following the genome indexing, we need to trim reads. I am using **Trimmomatic** in a batch array job on SLURM. The key to the code is the definition of the `R1` and `R2` definitions. There I print out the names with full paths for each file in the directory (these are the paired reads) and I select one pair at a time (in accordance with the `SLURM_ARRAY_TASK_ID` variable) and use those pairs to run my Trimmomatic command.
+
+## Align Reads
