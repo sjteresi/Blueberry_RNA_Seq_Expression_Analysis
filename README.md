@@ -45,6 +45,13 @@ This command, `/Scripts/Genome_Index/GenomeIndex_STAR.sb` runs rather quick. It 
 
 # 2) Trim the Reads:
 The second step in our workflow is trimming the reads. This script is one of the more involved scripts, and you may have to modify the `R1` and `R2` variables quite a bit to get the names matching your naming scheme.
+
+# 3) Align the Reads with STAR:
+The third step in the workflow involved using STAR to map the reads to the reference genome. It is important to have the right reference genome for your organism, otherwise things may not align in the best possible way. Alternative programs to STAR include TopHat and HISAT. 
+
+This script, like the read trimming, is a more involved script and you may have to edit it to match the naming scheme of your reads. However, STAR itself is relatively straightforward. The only main option that I edited on the STAR call is that I set `--outFilterMultimapNmax 1`. I did this option because we wanted to eliminate multiple alignments for a read, and avoid statistical anomalies for this set. 
+
+I then run STAR over 8 threads and specify the inputs and outputs.
 ## To Do
 2. Add comments to EdgeR script
 3. Generate workflow explanation or diagram
