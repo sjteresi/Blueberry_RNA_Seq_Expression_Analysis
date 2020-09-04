@@ -1,6 +1,13 @@
 # Blueberry RNA Seq
 This is a repository containing the code for generating gene expression and differential gene expression data from RNA-Seq reads in blueberry.
 
+# Contact Information:
+| Role          | Name          | GitHub                                                  | Email              |
+|---------------|---------------|---------------------------------------------------------|--------------------|
+| Project Lead: | Scott Teresi  | [Personal GitHub](https://github.com/huckleberry-hound) | <teresisc@msu.edu> |
+| PI:           | Patrick Edger | [Lab GitHub](https://github.com/EdgerLab)               | <edgerpat@msu.edu> |
+
+
 This README will be divided into two parts, generating counts, and performing differential expression analysis.
 
 # Part 1 - Generate Counts:
