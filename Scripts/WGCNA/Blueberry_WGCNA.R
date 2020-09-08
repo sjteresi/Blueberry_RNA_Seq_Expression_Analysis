@@ -1,6 +1,6 @@
 library(WGCNA)
 library(tidyverse)
-setwd("/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/WGCNA/Data")
+setwd("/home/scott/Documents/Uni/Research/Projects/Blueberry_Data/WGCNA_Data")
 options(stringsAsFactors = FALSE)
 enableWGCNAThreads(6)
 allowWGCNAThreads(6)
