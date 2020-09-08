@@ -1,0 +1,3 @@
+STAR 2.6.1
+Trimmomatic 0.38
+SAMtools 1.9
