@@ -136,10 +136,10 @@ EdgeR_Func = function(Counts, G1, G2, xi, test_type, treatment_groupings_same = 
   
 # Switch to output folder
 if (test_type == 'fdr') {
-  setwd('/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/EdgeR_Output/FDR/')
+  setwd('/home/scott/Documents/Uni/Research/Projects/Blueberry_Data/Diff_Ex/EdgeR_Output/FDR/')
 }
   else if (test_type == 'bonferroni') {
-    setwd('/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/EdgeR_Output/Bonferroni/')
+    setwd('/home/scott/Documents/Uni/Research/Projects/Blueberry_Data/Diff_Ex/EdgeR_Output/Bonferroni/')
   }
   
 rownames(Counts) <- Counts$Row.names
