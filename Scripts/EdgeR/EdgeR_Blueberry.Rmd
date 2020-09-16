@@ -257,18 +257,24 @@ run_comparisons = function(data_input_type) {
 	  G2 = c_obj_str(LIB_T)
 	  EdgeR_Func(Counts, G1, G2, xi, data_input_type, 'bonferroni', treatment_groupings_same = TRUE, comparison_order='Complex')
 	  EdgeR_Func(Counts, G1, G2, xi, data_input_type, 'fdr', treatment_groupings_same = TRUE, comparison_order='Complex')
+
+	  Counts = merge(DRA_C, LIB_C, by = 'row.names')
+	  G1 = c_obj_str(DRA_C)
+	  G2 = c_obj_str(LIB_C)
+	  EdgeR_Func(Counts, G1, G2, xi, data_input_type, 'bonferroni', treatment_groupings_same = TRUE, comparison_order='Complex')
+	  EdgeR_Func(Counts, G1, G2, xi, data_input_type, 'fdr', treatment_groupings_same = TRUE, comparison_order='Complex')
 	}
 }
 ```
 
 ```{r execute_all, eval=TRUE}
-single_hap = '/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/Input/Count/Collate/SingleHaplotype_Counts_Blueberry.tsv'
+single_hap = '/home/scott/Documents/Uni/Research/Projects/Blueberry_Data/Counts/Collate/SingleHaplotype_Counts_Blueberry.tsv'
 Blueberry = load_data(single_hap)
 Metadata_Blueberry = clean_data(Blueberry)
 run_comparisons('Single')
 
 
-all_hap = '/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/Input/Count/Collate/AllCounts_Blueberry.tsv'
+all_hap = '/home/scott/Documents/Uni/Research/Projects/Blueberry_Data/Counts/Collate/AllCounts_Blueberry.tsv'
 Blueberry = load_data(all_hap)
 Metadata_Blueberry = clean_data(Blueberry)
 run_comparisons('All')
