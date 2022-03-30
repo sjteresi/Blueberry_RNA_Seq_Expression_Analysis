@@ -1,94 +1,44 @@
----
-title: "Blueberry Differential Expression Analysis with EdgeR"
-author: "Scott Teresi"
-affiliation: "Edger Lab"
-abstract:
-thanks:
-keywords:
-output:
-  pdf_document:
-    highlight: default
-    citation_package:
-    keep_tex: false
-    fig_caption: true
-    latex_engine: pdflatex
-fontsize: 12pt
-urlcolor: blue
-geometry: margin=1in
-bibliography:
-biblio-style:
-header-includes:
-- \usepackage{indentfirst}
-- \usepackage{graphicx}
-- \usepackage{geometry}
-- \usepackage{subfigure}
-- \usepackage{amsmath}
-- \usepackage{listings}
-- \usepackage{tikz}
-- \usetikzlibrary{matrix}
----
+# NOTE each installation command must be done separately
+#install.packages("BiocManager")
+#BiocManager::install("edgeR")
+#install.packages("tidyverse")
+#install.packages("dplyr")
 
-\vspace{0.25in}
+# Load the libraries
+suppressPackageStartupMessages(library(edgeR))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(dplyr))
 
-# Purpose:
-Produce a matrix of differentially expressed genes for the blueberry RNA data, a smear plot, and a summary table. I will be using the package [edgeR](https://www.bioconductor.org/packages/release/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf) for this task.
-
-# Accessibility and Help:
-The following guide, source code, and other components of the blueberry expression analysis pipeline can be found at [Blueberry_RNA_Seq_Expression_Analysis](https://github.com/EdgerLab/Blueberry_RNA_Seq_Expression_Analysis) Github page. This page includes general information, the keys of the samples, and the list of comparisons desired.
-
-# Installation and Loading of Library:
-Using this [link](https://bioconductor.org/packages/release/bioc/html/edgeR.html) as reference, please install **edgeR**. I have set the chunk evaluation clause to FALSE, as you only need to install once and should do it manually.
-```{r eval=FALSE}
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("edgeR")
-```
-
-We also need [tidyverse](https://www.tidyverse.org/) which includes [dplyr](https://dplyr.tidyverse.org/) but just to be safe we will install both with:
-```{r eval=FALSE}
-install.packages("tidyverse")
-install.packages("dplyr")
-```
-
-And then we will load the libraries with:
-```{r message=FALSE}
-library(edgeR)
-library(tidyverse)
-library(dplyr)
-```
 
 # Loading the Data Into R (Part 1):
-Here we will load all of our data from HTSeq into R. There are 3 files. Two of which, the 802 and 724 data sets can be lumped together as they have similar samples. The 809 data set belongs on its own. Below I import the data, perform the appropriate merges and reorient the data. I also remove rows that are completely 0s, because they are uninformative rows (genes) and will cause statistical issues.
-
-```{r Load_Data}
-# Import data
-load_data = function(data_dir){
-	Blueberry = read.csv(data_dir, sep='\t', header=TRUE)
-	#Blueberry = read.csv('/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/Input/Count/Collate/SingleHaplotype_Counts_Blueberry.tsv',
-	       #sep = '\t',
-			   #header = TRUE)
-
-	# Remove the extraneous 5 rows at the bottom, these extraneous are supplementary info from HTSeq
-	Blueberry = head(Blueberry, n = -5)
+# Here we will load all of our data from HTSeq into R.
+# There are 3 files. Two of which, the 802 and 724 data sets can be lumped together as they have similar samples.
+# The 809 data set belongs on its own.
+# Below I import the data, perform the appropriate merges and reorient the data.
+# I also remove rows that are completely 0s, because they are uninformative rows (genes) and will cause statistical issues.
+load_counts_as_table = function(count_file){
+	count_table = read.csv(count_file, sep='\t', header=TRUE)
+	# Remove the extraneous 5 rows at the bottom,
+       	# these extraneous are supplementary info from HTSeq
+	count_table = head(count_table, n = -5)
 
 	# Set the index
-	rownames(Blueberry) = Blueberry$Gene
+	rownames(count_table) = count_table$Gene
 
 	# Get rid of gene name column because it is now the index
-	Blueberry = subset(Blueberry, select = -c(Gene))
+	count_table = subset(count_table, select = -c(Gene))
 
 	# Remove the rows that are completely 0s, uninformative rows
-	Blueberry = Blueberry[apply(Blueberry, 1, function(x) {
+	count_table = count_table[apply(count_table, 1, function(x) {
 	  !all(x == 0)}), ] 
-return(Blueberry)
+return(count_table)
 }
-```
 
 # Loading the Data Into R (Part 2):
-Here we will filter the data and add the appropriate "metadata" so that we can easily recognie each sample. I write these as a function so that we can easily utilize them later inside the individual sample comparison chunks.
+# Here we will filter the data and add the appropriate "metadata"
+# so that we can easily recognie each sample.
+# I write these as a function so that we can easily utilize them later inside the individual sample comparison chunks.
 
-```{r Clean_Data, eval=TRUE}
 clean_data = function(Blueberry){
 	Metadata_Blueberry = Blueberry
 	# Add two empty rows at the end of the data frame to be filled with the
@@ -135,9 +85,7 @@ clean_data = function(Blueberry){
 	}
 return(Metadata_Blueberry)
 }
-```
 
-```{r CompareEm, eval = TRUE}
 EdgeR_Func = function(Counts, G1, G2, xi, data_input_type, test_type, treatment_groupings_same=FALSE, comparison_order='Simple') {
 	
     
@@ -208,12 +156,10 @@ EdgeR_Func = function(Counts, G1, G2, xi, data_input_type, test_type, treatment_
 	Direction = as_tibble(rownames_to_column(simplified_DGE_frame, var = 'Gene_Name'))
 	write_tsv(Direction, paste(G1, xi, '_vs_', G2, xi, '_Direction.tsv', sep = ''))
 }
-```
 
 
 
 # Compare C vs T
-```{r Start_Comparisons, eval=TRUE}
 c_obj_str = function(my_obj) {
   deparse(substitute(my_obj))
 }
@@ -265,17 +211,14 @@ run_comparisons = function(data_input_type) {
 	  EdgeR_Func(Counts, G1, G2, xi, data_input_type, 'fdr', treatment_groupings_same = TRUE, comparison_order='Complex')
 	}
 }
-```
 
-```{r execute_all, eval=TRUE}
 single_hap = '/home/scott/Documents/Uni/Research/Projects/Blueberry_Data/Counts/Collate/SingleHaplotype_Counts_Blueberry.tsv'
-Blueberry = load_data(single_hap)
+Blueberry = load_counts_as_table(single_hap)
 Metadata_Blueberry = clean_data(Blueberry)
 run_comparisons('Single')
 
 
 all_hap = '/home/scott/Documents/Uni/Research/Projects/Blueberry_Data/Counts/Collate/AllCounts_Blueberry.tsv'
-Blueberry = load_data(all_hap)
+Blueberry = load_counts_as_table(all_hap)
 Metadata_Blueberry = clean_data(Blueberry)
 run_comparisons('All')
-```
