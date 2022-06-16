@@ -4,6 +4,8 @@
 
 ROOT_DIR:= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 DEV_DATA:= $(ROOT_DIR)/..Blueberry_Data
+DEV_NEW_DATA:= $(ROOT_DIR)/data
+DEV_RESULTS:= $(ROOT_DIR)/results
 DEV_CODE_FILES:=$(ROOT_DIR)/src
 
 # Step 1 of Workflow:
@@ -44,6 +46,19 @@ collate_reads:
 # Step 6 of Workflow:
 # Run EdgeR to determine differentially expressed genes
 EdgeR:
-	# NOTE I ran this on personal computer, file paths are hardcoded into the script
+	# NOTE ran on personal computer not cluster
+	# NOTE I hate package management in R. It is so poorly implemented.
+	# I cannot easily get a version greater than R 3.6 in Anaconda
+	# So Anaconda is out of the question
+	# So I am stuck using this crappy renv. 
+	# renv doesn't like me trying to declare paths whenever
+	# I have to load or unload packages
+	# So we have to run EdgeR via some shitty method.
+	# You CANNOT run via Makefile. These notes here are just for reference
+	# You need to CD into the requirments folder
+	# And then run the command manually.
+	#
+	# ADDENDUM, run this in Rstudio because it is so hard from command line.
 	@echo Running EdgeR
-	Rscript src/EdgeR/EdgeR_Blueberry.Rmd
+	cd $(ROOT_DIR)/requirements
+	Rscript src/EdgeR/EdgeR_Blueberry.R $(DEV_RESULTS)/All_Counts_Blueberry.tsv $(DEV_RESULTS)/EdgeR_Differential_Expression
