@@ -1,7 +1,7 @@
 coloredlogs==14.0
 HTSeq==0.12.4
 humanfriendly==8.2
-numpy==1.19.1
+numpy==1.22.0
 pandas==1.1.2
 pkg-resources==0.0.0
 pysam==0.16.0.1
