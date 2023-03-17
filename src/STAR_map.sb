@@ -1,12 +1,12 @@
 #!/bin/bash -login
-
-#SBATCH -J STAR_Teresi
+#SBATCH -J STAR_map
 #SBATCH --time=03:59:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem-per-cpu=8G
 #SBATCH --array=1-84
-#SBATCH --output=SubmissionScripts/ArraySTAR.%A_%a.log
+#SBATCH --output=/mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq_Expression_Analysis/results/star_map/star_map_logs/ArraySTAR.%A_%a.log
+#SBATCH -A general
 
 # Load Modules
 module purge
@@ -19,20 +19,19 @@ module load SAMtools/1.9
 begin=`date +%s`
 echo $HOSTNAME
 echo "My Task ID:" $SLURM_ARRAY_TASK_ID
-read_location='/mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq/Input/Trimmomatic/Output/'
+read_location='/mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq_Expression_Analysis/results/trim/'
 cd $read_location
 R1=$(ls -d $PWD/*R1_001_trimmed_P1.fq.gz | sed -n ${SLURM_ARRAY_TASK_ID}p)
 R2=$(ls -d $PWD/*R2_001_trimmed_P2.fq.gz | sed -n ${SLURM_ARRAY_TASK_ID}p)
 R1_Base=`basename $R1 .fq.gz`
-mkdir /mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq/Input/Mapping/Output/${R1_Base}
-cd /mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq/Input/Mapping/Output/${R1_Base}
+mkdir /mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq_Expression_Analysis/results/star_map/${R1_Base}
+cd /mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq_Expression_Analysis/results/star_map/${R1_Base}
 
 # Code
-
 # STAR
 echo Starting STAR
 STAR --runThreadN 8 \
---genomeDir /mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq/Input/Genome_Index/ \
+--genomeDir /mnt/research/edgerpat_lab/Scotty/Blueberry_RNA_Seq_Expression_Analysis/results/genome_index/ \
 --readFilesIn $R1 $R2 \
 --readFilesCommand zcat \
 --outFilterMultimapNmax 1

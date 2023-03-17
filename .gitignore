@@ -2,3 +2,6 @@
 *.fasta
 *.gff
 .Rproj.user
+data/Trimmomatic/*
+data/raw_reads/*
+results/*
