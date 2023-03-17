@@ -1,0 +1,2 @@
+data/V_corymbosum_v1.0_geneModels.gff.gz filter=lfs diff=lfs merge=lfs -text
+data/V_corymbosum_genome_v1.0.fasta.gz filter=lfs diff=lfs merge=lfs -text

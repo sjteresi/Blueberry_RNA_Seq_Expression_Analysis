@@ -8,6 +8,7 @@ Align RNA-Seq data to a genome, generate gene expression tables (FPKM, TPM), gen
 | PI:           | Patrick Edger | [Lab GitHub](https://github.com/EdgerLab)               | <edgerpat@msu.edu> |
 
 # Workflow Plan:
+The workflow is recapitulated in the `Makefile`.
 1. Index the genome with STAR
 2. Trim the reads
 3. Align the reads with STAR
@@ -17,16 +18,16 @@ Align RNA-Seq data to a genome, generate gene expression tables (FPKM, TPM), gen
 
 # Description:
 ## Indexing the genome with STAR
-First, the genome was indexed using `STAR v2.6.1`, the genome FASTA file, and the gene annotation file. The FASTA file and annotation file were derived from the [genome publication](https://academic.oup.com/gigascience/article/8/3/giz012/5304886). The commands used to perform this can be found in the `src/GenomeIndex_STAR.sb` script.
+First, the genome was indexed using `STAR v2.6.1`, the genome FASTA file, and the gene annotation file. The FASTA file and annotation file were derived from the [genome publication](https://academic.oup.com/gigascience/article/8/3/giz012/5304886). The commands used to perform this can be found in the `src/genome_index_STAR.sb` script.
 
 ## Trimming the reads:
-Illumina adapters were removed from the raw reads using `Trimmomatic v0.38`. More details can be found in the `src/Trim/Trim_All.sb` script.
+Illumina adapters were removed from the raw reads using `Trimmomatic v0.38`. More details can be found in the `src/trim_all.sb` script.
 
 ## Alignment of reads:
-Filtered reads were then aligned to the genome using `STAR v2.6.1` and the script associated with this command may be found at `src/Mapping/STAR_Map.sb`. Multimapping reads were discarded.
+Filtered reads were then aligned to the genome using `STAR v2.6.1` and the script associated with this command may be found at `src/STAR_map.sb`. Multimapping reads were discarded.
 
 ## Quantification of counts and calculation of differentially expressed genes:
-Count files were calculated using `HTSeq v0.12.4`. Individual count files were then collated using the custom Python script at `src/CountCollate/count_collate.py`. This was then used as input to `EdgeR v3.30.3` `(R v4.0.2)` to determine which genes are differentially expressed in each condition comparison. An FDR correction using the Benjamini-Hochberg method was utilized. The script associated with this analysis may be found at `src/EdgeR/EdgeR_Blueberry.Rmd`. 
+Count files were calculated using `HTSeq v0.12.4`. Individual count files were then collated using the custom Python script at `src/count_collate.py`. This was then used as input to `EdgeR v3.30.3` `(R v4.0.2)` to determine which genes are differentially expressed in each condition comparison. An FDR correction using the Benjamini-Hochberg method was utilized. The script associated with this analysis may be found at `src/EdgeR/EdgeR_Blueberry.R`. 
 
 # Follow Up Project:
 This project continues with [Network Analysis](https://github.com/EdgerLab/Blueberry_Network_Rewiring). There I identify orthologs and examine gene network differences between the two blueberry cultivars in this dataset.

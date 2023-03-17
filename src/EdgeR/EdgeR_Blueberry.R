@@ -18,8 +18,9 @@ suppressPackageStartupMessages(library(dplyr))
 # NOTE this doesn't need to be run everytime, only if I install new stuff
 ############################################
 # MASTER ARGS
-input_counts_path = '/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/results/All_Counts_Blueberry.tsv'
-output_dir = '/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/results/EdgeR_Differential_Expression'
+# TODO check these paths
+input_counts_path = '/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/results/count_collate/All_Counts_Blueberry.tsv'
+output_dir = '/home/scott/Documents/Uni/Research/Projects/Blueberry_RNA_Seq_Expression_Analysis/results/Diff_Ex/EdgeR_Output'
 ############################################
 
 # Loading the Data Into R (Part 1):
